@@ -21,12 +21,10 @@ const PublicationTaller = () => {
                 {publications.map((publication) => (
                     <li
                         key={publication._id}
-                        className="p-4 border rounded shadow hover:shadow-lg transition-shadow"
+                        className="p-4 border rounded-4xl shadow hover:shadow-lg transition-shadow cursor-pointer"
+                        onClick={() => navigate(`/publication/${publication._id}`)} // Navega al componente PublicationInformation
                     >
                         <h2 className="text-xl font-semibold">{publication.title}</h2>
-                        {!publication.doc && (
-                            <p className="text-red-500">No hay documento disponible para esta publicación.</p>
-                        )}
                     </li>
                 ))}
             </ul>

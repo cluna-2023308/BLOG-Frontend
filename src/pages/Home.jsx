@@ -13,7 +13,7 @@ export const Home = () => {
                 <span>Tecnologia III</span>
                 <button
                     onClick={() => navigate('/publicaciones/tecnologia')}
-                    className='mt-4 bg-neutral-100 hover:bg-neutral-200'
+                    className='mt-4 bg-gray-100 hover:bg-neutral-200'
                 >
                     Ver las publicaciones
                 </button>
@@ -22,7 +22,7 @@ export const Home = () => {
                 <span>Taller III</span>
                 <button 
                     onClick={() => navigate('/publicaciones/taller')}
-                    className='mt-4 bg-neutral-200 hover:bg-neutral-300'
+                    className='mt-4 bg-gray-200 hover:bg-neutral-300'
                 >
                     Ver las publicaciones
                 </button>
@@ -31,7 +31,7 @@ export const Home = () => {
                 <span>Practica Supervisada</span>
                 <button 
                     onClick={() => navigate('/publicaciones/practica')}
-                    className='mt-4 bg-neutral-300 hover:bg-neutral-400'
+                    className='mt-4 bg-gray-300 hover:bg-neutral-400'
                 >
                     Ver las publicaciones
                 </button>
