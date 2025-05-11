@@ -1,17 +1,22 @@
 import React from "react";
 import { useListPublicationTaller } from "../../shared/hooks/useListPublicationTaller";
+import { useListPublicationNewTaller } from "../../shared/hooks/useListNewPubliTaller";
 import { useNavigate } from "react-router-dom";
 
 const PublicationTaller = () => {
-    const { publications, loading, error } = useListPublicationTaller();
+    const { publications: defaultPublications, loading, error } = useListPublicationTaller();
+    const { publications: newPublications, loading: loadingNew, error: errorNew } = useListPublicationNewTaller();
+    const [isSorted, setIsSorted] = React.useState(false);
     const navigate = useNavigate();
 
-    if (loading) {
+    const publications = isSorted ? newPublications : defaultPublications;
+
+    if (loading || loadingNew) {
         return <p className="text-center text-lg">Cargando publicaciones...</p>;
     }
 
-    if (error) {
-        return <p className="text-center text-lg text-red-500">Error: {error}</p>;
+    if (error || errorNew) {
+        return <p className="text-center text-lg text-red-500">Error: {error || errorNew}</p>;
     }
 
     return (
@@ -30,10 +35,17 @@ const PublicationTaller = () => {
             </ul>
             <div className="flex justify-center space-x-4 mt-6">
                 <button
+                    onClick={() => setIsSorted(!isSorted)}
+                    className="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-800 transition-colors"
+                >
+                    {isSorted ? "Orden original" : "Ordenar por publicación más reciente"}
+                </button>
+                <nav className="mb-10"></nav>
+                <button
                     onClick={() => navigate("/")}
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
                 >
-                    Regresar al Inicio
+                    Regresar
                 </button>
             </div>
         </div>

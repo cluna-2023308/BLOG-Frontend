@@ -62,3 +62,30 @@ export const createComment = async (publicationId, text, user) => {
         return { error: error.response?.data?.message || error.message };
     }
 };
+
+export const getPublicationsTecnologiaNew = async () => {
+    try {
+        const res = await apiClient.get("/publication/new/Tecnologia III");
+        return {data: res.data};
+    } catch (error) {
+        return {error: error.message};
+    }
+}
+
+export const getPublicationsTallerNew = async () => {
+    try {
+        const res = await apiClient.get("/publication/new/Taller III");
+        return {data: res.data};
+    } catch (error) {
+        return {error: error.message};
+    }
+}
+
+export const getPublicationsPracticaNew = async () => {
+    try {
+        const res = await apiClient.get("/publication/new/Practica Supervisada");
+        return {data: res.data};
+    } catch (error) {
+        return {error: error.message};
+    }
+}
