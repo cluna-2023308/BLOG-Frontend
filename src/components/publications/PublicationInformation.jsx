@@ -11,6 +11,7 @@ const PublicationInformation = () => {
 
     const [newComment, setNewComment] = useState("");
     const [user, setUser] = useState("");
+    const [imageData, setImageData] = useState(null);
 
     useEffect(() => {
         if (id) {
@@ -20,18 +21,37 @@ const PublicationInformation = () => {
         }
     }, [id, fetchPublicationById]);
 
+    useEffect(() => {
+        const fetchImage = async () => {
+            if (publication?._id) {
+                try {
+                    const res = await fetch(`http://localhost:3003/blog/v1/publication/image/${publication._id}`);
+                    const data = await res.json();
+                    if (data.success && data.image) {
+                        setImageData(data.image);
+                    } else {
+                        setImageData(null);
+                    }
+                } catch (err) {
+                    setImageData(null);
+                    console.error("Error al cargar la imagen:", err);
+                }
+            }
+        };
+        fetchImage();
+    }, [publication]);
+
     const handleSubmitComment = async (e) => {
         e.preventDefault();
         if (!newComment.trim() || !user.trim()) {
             alert("Por favor, completa todos los campos.");
             return;
         }
-
         const comment = await handleCreateComment(id, newComment, user);
         if (comment) {
-            setNewComment(""); // Limpia el campo de texto
-            setUser(""); // Limpia el campo de usuario
-            fetchPublicationById(id); // Refresca los comentarios
+            setNewComment("");
+            setUser("");
+            fetchPublicationById(id);
         }
     };
 
@@ -69,8 +89,22 @@ const PublicationInformation = () => {
                 <strong>Categoría:</strong> {publication.category?.name || "Sin categoría"}
             </p>
             <p className="text-gray-500 mb-4 text-center">
-                <strong>Fecha:</strong> {publication.date ? new Date(publication.date).toLocaleDateString() : "Fecha no disponible"}
+                <strong>Fecha:</strong>{" "}
+                {publication.date ? new Date(publication.date).toLocaleDateString() : "Fecha no disponible"}
             </p>
+
+            <div className="mb-4">
+                {imageData ? (
+                    <img
+                        src={imageData}
+                        alt={publication.title}
+                        className="w-full max-w-md rounded-2xl shadow-lg"
+                    />
+                ) : (
+                    <span className="text-red-500 text-center block">No hay imagen disponible para esta publicación.</span>
+                )}
+            </div>
+
             {publication.doc ? (
                 <a
                     href={`data:application/pdf;base64,${publication.doc}`}
@@ -96,7 +130,8 @@ const PublicationInformation = () => {
                                     <strong>Comentario:</strong> {comment.text}
                                 </p>
                                 <p className="text-gray-500">
-                                    <strong>Fecha:</strong> {comment.date ? new Date(comment.date).toLocaleDateString() : "Fecha no disponible"}
+                                    <strong>Fecha:</strong>{" "}
+                                    {comment.date ? new Date(comment.date).toLocaleDateString() : "Fecha no disponible"}
                                 </p>
                             </li>
                         ))}
@@ -118,7 +153,7 @@ const PublicationInformation = () => {
                         required
                     />
                     <textarea
-                        placeholder="Aqui tu comentario..."
+                        placeholder="Aquí tu comentario..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         className="border p-2 w-full rounded-2xl"
@@ -132,7 +167,7 @@ const PublicationInformation = () => {
                         {creatingComment ? "Enviando..." : "Agregar Comentario"}
                     </button>
                     {commentError && <p className="text-red-500">{commentError}</p>}
-                    {success && <p className="text-shadow-emerald-600">Comentario agregado exitosamente.</p>}
+                    {success && <p className="text-emerald-600">Comentario agregado exitosamente.</p>}
                 </form>
             </div>
 

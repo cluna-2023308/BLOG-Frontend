@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
+import iconTec from '../assets/tecnologia-logo.png';
+import iconTal from '../assets/taller-logo.png';
+import iconPS from '../assets/practica-logo.png';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ export const Home = () => {
         <Navbar />
         <div className='flex justify-center flex-1 flex-row'>
             <section className='flex-1 text-lg font-bold bg-gray-100 flex flex-col justify-center items-center'>
+                <img src={iconTec} alt="Tecnología III" className="w-50 h-50 mb-15" />
                 <span>Tecnologia III</span>
                 <button
                     onClick={() => navigate('/publicaciones/tecnologia')}
@@ -19,6 +23,7 @@ export const Home = () => {
                 </button>
             </section>
             <section className='flex-1 text-lg font-bold bg-gray-200 flex flex-col justify-center items-center'>
+                <img src={iconTal} alt="Tecnología III" className="w-50 h-50 mb-15" />
                 <span>Taller III</span>
                 <button 
                     onClick={() => navigate('/publicaciones/taller')}
@@ -28,6 +33,7 @@ export const Home = () => {
                 </button>
             </section>
             <section className='flex-1 text-lg font-bold bg-gray-300 flex flex-col justify-center items-center'>
+                <img src={iconPS} alt="Tecnología III" className="w-50 h-50 mb-15" />
                 <span>Practica Supervisada</span>
                 <button 
                     onClick={() => navigate('/publicaciones/practica')}
