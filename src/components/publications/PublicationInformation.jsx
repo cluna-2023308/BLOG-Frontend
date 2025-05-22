@@ -1,45 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useFindByIdPublication } from "../../shared/hooks/useFindByIdPublication";
 import { useCreateComment } from "../../shared/hooks/useCreateComment";
+import { useFindByIdImage } from "../../shared/hooks/useFindByIdImage";
 import { useParams, useNavigate } from "react-router-dom";
 
 const PublicationInformation = () => {
     const { id } = useParams();
     const { publication, loading, error, fetchPublicationById } = useFindByIdPublication();
     const { handleCreateComment, loading: creatingComment, error: commentError, success } = useCreateComment();
+    const { imageData, loading: loadingImage, error: errorImage, fetchImageById } = useFindByIdImage();
     const navigate = useNavigate();
 
     const [newComment, setNewComment] = useState("");
     const [user, setUser] = useState("");
-    const [imageData, setImageData] = useState(null);
 
     useEffect(() => {
         if (id) {
             fetchPublicationById(id).catch((err) => {
                 console.error("Error al obtener la publicación:", err);
             });
+            fetchImageById(id);
         }
-    }, [id, fetchPublicationById]);
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            if (publication?._id) {
-                try {
-                    const res = await fetch(`http://localhost:3003/blog/v1/publication/image/${publication._id}`);
-                    const data = await res.json();
-                    if (data.success && data.image) {
-                        setImageData(data.image);
-                    } else {
-                        setImageData(null);
-                    }
-                } catch (err) {
-                    setImageData(null);
-                    console.error("Error al cargar la imagen:", err);
-                }
-            }
-        };
-        fetchImage();
-    }, [publication]);
+    }, [id, fetchPublicationById, fetchImageById]);
 
     const handleSubmitComment = async (e) => {
         e.preventDefault();
@@ -94,7 +76,11 @@ const PublicationInformation = () => {
             </p>
 
             <div className="mb-4">
-                {imageData ? (
+                {loadingImage ? (
+                    <span className="text-gray-500 text-center block">Cargando imagen...</span>
+                ) : errorImage ? (
+                    <span className="text-red-500 text-center block">No hay imagen disponible para esta publicación.</span>
+                ) : imageData ? (
                     <img
                         src={imageData}
                         alt={publication.title}
@@ -109,7 +95,7 @@ const PublicationInformation = () => {
                 <a
                     href={`data:application/pdf;base64,${publication.doc}`}
                     download={`${publication.title}.pdf`}
-                    className="text-blue-500 hover:underline"
+                    className="text-gray-500 hover:underline hover:text-green-600 transition-colors mb-4"
                 >
                     Descargar Documento
                 </a>

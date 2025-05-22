@@ -89,3 +89,16 @@ export const getPublicationsPracticaNew = async () => {
         return {error: error.message};
     }
 }
+
+export const getImageById = async (id) => {
+    try {
+        const res = await apiClient.get(`/publication/image/${id}`);
+        if (res.data && res.data.success) {
+            return { data: res.data.image };
+        } else {
+            return { error: "No se encontró la imagen o hubo un error en el servidor." };
+        }
+    } catch (error) {
+        return { error: error.response?.data?.message || error.message };
+    }
+}
